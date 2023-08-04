@@ -45,6 +45,7 @@ function App() {
   const [country, setCountry] = useState<any>();
   const [rates, setRates] = useState<any>();
   const { authenticated, logout } = useAuth();
+  // console.log(authenticated);
   return (
     <div
       className="w-100"
@@ -125,10 +126,10 @@ function App() {
                 md="8"
               >
                 <p className="text-start">
-                  Minimum: {weather?.main?.temp_min} Celcius
+                  Temp. Minimum: {weather?.main?.temp_min} Celcius
                 </p>
                 <p className="text-start">
-                  Maximum: {weather?.main?.temp_max} Celcius
+                  Temp. Maximum: {weather?.main?.temp_max} Celcius
                 </p>
               </Col>
               <Col
@@ -145,56 +146,70 @@ function App() {
             </Row>
 
             {/* Data that should render conditionally */}
-            <div
-              className="d-flex flex-column gap-3"
-              style={{
-                fontSize: "0.825rem",
-              }}
-            >
-              <Row className="justify-content-between d-flex flex-row">
-                <Col className="" sm="9">
-                  Population (in Millions) :{" "}
-                </Col>
-                <Col className="text-end" sm="3">
-                  <strong className="text-end">{country?.population}</strong>
-                </Col>
-              </Row>
-              <Row className="">
-                <Col sm="9">GDP per capita :</Col>
-                <Col sm="3" className="text-end ">
-                  <strong className="text-end">
-                    {country?.gdp_per_capita}
-                  </strong>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm="5">Exchange Rate :</Col>
-                <Col sm="7" className="text-end">
-                  {country && (
-                    <>
-                      <strong className="text-end">
-                        1{" "}
-                        {country?.currency.code == "MZN"
-                          ? "USD"
-                          : country?.currency.code}
-                      </strong>{" "}
-                      buys{" "}
-                      <strong className="text-end">
-                        {rates?.new_amount} MZN
-                      </strong>
-                    </>
-                  )}
-                </Col>
-              </Row>
-            </div>
+            {!authenticated ? (
+              <>Some information was hidden from you...</>
+            ) : (
+              <div
+                className="d-flex flex-column gap-3"
+                style={{
+                  fontSize: "0.825rem",
+                }}
+              >
+                <Row className="justify-content-between d-flex flex-row">
+                  <Col className="" sm="9">
+                    Population (in Millions) :{" "}
+                  </Col>
+                  <Col className="text-end" sm="3">
+                    <strong className="text-end">{country?.population}</strong>
+                  </Col>
+                </Row>
+                <Row className="">
+                  <Col sm="9">GDP per capita :</Col>
+                  <Col sm="3" className="text-end ">
+                    <strong className="text-end">
+                      {country?.gdp_per_capita}
+                    </strong>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="5">Exchange Rate :</Col>
+                  <Col sm="7" className="text-end">
+                    {country && (
+                      <>
+                        <strong className="text-end">
+                          1{" "}
+                          {country?.currency.code == "MZN"
+                            ? "USD"
+                            : country?.currency.code}
+                        </strong>{" "}
+                        buys{" "}
+                        <strong className="text-end">
+                          {rates?.new_amount} MZN
+                        </strong>
+                      </>
+                    )}
+                  </Col>
+                </Row>
+              </div>
+            )}
           </CardBody>
         </Card>
       </Row>
 
       <Row>
-        <Col className="text-center">
-          You are not logged in <Link to={"/login"}> click here to log in</Link> and see more details
-        </Col>
+        {authenticated ? (
+          <Col className="d-flex justify-content-center">
+            <Button color="danger" onClick={() => logout()}>
+              Sair da conta
+            </Button>
+          </Col>
+        ) : (
+          <Col className="text-center">
+            You are not logged in{" "}
+            <Link to={"/login"}> click here to log in</Link> and see more
+            details
+          </Col>
+        )}
       </Row>
 
       {/* Footer */}
