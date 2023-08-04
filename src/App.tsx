@@ -56,7 +56,11 @@ function App() {
       }}
     >
       <Row>
-        <Col className="text-center">WELCOME TO OSVALDO TRAVELL AGENCY!</Col>
+        <Col className="text-center my-5"
+        style={{
+          fontWeight:"600"
+        }}
+        >WELCOME TO OSVALDO's TRAVELL AGENCY!</Col>
       </Row>
 
       {/* Content */}
