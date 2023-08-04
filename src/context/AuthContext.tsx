@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextData {
     authenticated: boolean;
@@ -13,29 +13,30 @@ export function useAuth() {
 }
 
 export const AuthContextProvider = ({ children }: any) => {
-    const [authenticated, setAuthenticated] = useState(false);
-
+  const [authenticated, setAuthenticated] = useState(false);
+  useEffect(() => {
     // Verificar se o usuário já possui um token JWT salvo (pode ser no localStorage ou sessionStorage)
-    const token = localStorage.getItem('token'); // ou sessionStorage.getItem('token');
+    const token = localStorage.getItem("token"); // ou sessionStorage.getItem('token');
     if (token) {
-        setAuthenticated(true);
+      setAuthenticated(true);
     }
+  }, []); // O array vazio [] indica que o useEffect será executado apenas uma vez, quando o componente for montado
 
-    const login = (token: string) => {
-        // Salvar o token no localStorage ou sessionStorage, dependendo dos requisitos de segurança da sua aplicação
-        localStorage.setItem('token', token); // ou sessionStorage.setItem('token', token);
-        setAuthenticated(true);
-    };
+  const login = (token: string) => {
+    // Salvar o token no localStorage ou sessionStorage, dependendo dos requisitos de segurança da sua aplicação
+    localStorage.setItem("token", token); // ou sessionStorage.setItem('token', token);
+    setAuthenticated(true);
+  };
 
-    const logout = () => {
-        // Remover o token do localStorage ou sessionStorage ao fazer logout
-        localStorage.removeItem('token'); // ou sessionStorage.removeItem('token');
-        setAuthenticated(false);
-    };
+  const logout = () => {
+    // Remover o token do localStorage ou sessionStorage ao fazer logout
+    localStorage.removeItem("token"); // ou sessionStorage.removeItem('token');
+    setAuthenticated(false);
+  };
 
-    return (
-        <AuthContext.Provider value={{ authenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ authenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
